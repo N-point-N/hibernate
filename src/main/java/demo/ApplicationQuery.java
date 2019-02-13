@@ -5,7 +5,9 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ApplicationWrite {
+import java.util.List;
+
+public class ApplicationQuery {
 
     public static void main(String[] args) {
         SessionFactory factory = new Configuration()
@@ -17,14 +19,16 @@ public class ApplicationWrite {
             Session session = factory.getCurrentSession();
 
             try {
-                Student student = new Student("FFF", "LLL", "test@mail.com0");
-
                 session.beginTransaction();
-                session.save(student);
-                session.getTransaction().commit();
+
+                List<Student> theStudents = session.createQuery("from  Student s where s.lastName='Wall'").list();
+
+                for(Student tempStudent: theStudents){
+                    System.out.println(tempStudent);
+                }
             } finally {
                 if (session.isOpen()) {
-                    session.close();
+                    session.getTransaction().commit();
                 }
             }
         } finally {

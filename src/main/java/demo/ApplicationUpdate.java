@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ApplicationWrite {
+public class ApplicationUpdate {
 
     public static void main(String[] args) {
         SessionFactory factory = new Configuration()
@@ -17,14 +17,17 @@ public class ApplicationWrite {
             Session session = factory.getCurrentSession();
 
             try {
-                Student student = new Student("FFF", "LLL", "test@mail.com0");
-
                 session.beginTransaction();
-                session.save(student);
-                session.getTransaction().commit();
+                Student student = (Student) session.get(Student.class, 2);
+                if (student != null) {
+                    student.setFirstName("Scooby");
+                }
+                System.out.println(student.toString());
+
+                session.createQuery("update Student set email = 'foo@gmail.com'").executeUpdate();
             } finally {
                 if (session.isOpen()) {
-                    session.close();
+                    session.getTransaction().commit();
                 }
             }
         } finally {

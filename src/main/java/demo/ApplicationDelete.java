@@ -5,7 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class ApplicationWrite {
+public class ApplicationDelete {
 
     public static void main(String[] args) {
         SessionFactory factory = new Configuration()
@@ -17,14 +17,12 @@ public class ApplicationWrite {
             Session session = factory.getCurrentSession();
 
             try {
-                Student student = new Student("FFF", "LLL", "test@mail.com0");
-
                 session.beginTransaction();
-                session.save(student);
-                session.getTransaction().commit();
+
+                System.out.println((session.createQuery("delete from Student where first_name='FFF'").executeUpdate()));
             } finally {
                 if (session.isOpen()) {
-                    session.close();
+                    session.getTransaction().commit();
                 }
             }
         } finally {
